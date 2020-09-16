@@ -25,7 +25,7 @@ SECRET_KEY = '3wrs18lg+3uf2bpb6nf7a(=@=0-!@f8)apugv4vi6j&&hz3fek'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
 
 
 # Application definition
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'disko_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

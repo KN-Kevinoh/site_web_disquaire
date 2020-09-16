@@ -1,0 +1,9 @@
+{% extends './store/base.html' %}
+{% block content %}
+    <p><a href="#" class="text-danger">Oops! Ressource Not Found.</a></p>
+    <p class="text-dark"> Sorry! Some problems occurred, check your internet before trying.  </p>
+    {% include './store/search_from.html' %}
+    <div class="embed-responsive embed-responsive-16by9">
+        <iframe src="https://www.youtube.com/embed/E9Rl1GvTsiA" frameborder="0" allowfullscreen></iframe>
+    </div>
+{% endblock %}

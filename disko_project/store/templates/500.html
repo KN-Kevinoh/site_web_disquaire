@@ -1,0 +1,11 @@
+{% extends './store/base.html' %}
+{% block content %}
+    <p><a href="#" class="text-danger">Oops! Server Unvailible.</a></p>
+    <p class="text-dark"> Sorry, we are temporarily unavailable.  </p>
+    <div>
+        {% include './store/search_from.html' %}
+    </div>
+    <div class="embed-responsive embed-responsive-16by9">
+        <iframe src="https://www.youtube.com/embed/CduA0TULnow" frameborder="0" allowfullscreen></iframe>
+    </div>
+{% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 #from django.http import HttpResponse
 from .models import Artist,  Album, Contact, Booking
 #from django.template import loader # module loader to load templates
@@ -14,7 +14,8 @@ def index(request):
     #template = loader.get_template('strore/index.html')
     # set gabarit context
     context = {'albums': albums}
-    return render(request , 'strore/index.html', context)
+    return render(request , 'store/index.html', context)
+
 
 def listing(request):
     albums = Album.objects.filter(available=True)
@@ -25,16 +26,17 @@ def listing(request):
 
 def details(request, id):
     album_id = int(id)
-    album = Album.objects.get(pk=album_id)
+    #album = Album.objects.get(pk=album_id)
+    album = get_object_or_404(Album, pk=album_id)
     artists_name = " ".join([artist.name for artist in album.artists.all()])
-    #message = "Album name is {}. It wrote by {}".format(album.title, artists)
+   
     context = {
         'album_title': album.title,
         'album_name': artists_name,
         'album_id': album.id,
         'thumbnail': album.picture
     }
-    return render(request, "store/details.html", context) 
+    return render(request, 'store/details.html', context) 
 
 def search(request):
     query = request.GET.get('query')
