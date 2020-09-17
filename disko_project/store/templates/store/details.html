@@ -16,20 +16,31 @@
 
   <h2 class="text-center artist_name">Reservation: {{ album_title }}</h2>
   <p style="margin-bottom: 20px;">Validate  {{ album_title }} and come take it as soonce as possible! </p>
-  <form class="form-inline" action="/" method="post">
-
-    <div class="form-group">
-      <label for="name" class="control-label">Name</label>
-      <input type="text" name="name" value="" id="name">
+  <form class="form-inline" action="{% url 'store:details' id=album_id %}" method="post">
+    {% csrf_token %} <!-- prevent to cross side requests  foldering -->
+    <div class="form-group {% if form.name.form_errors %}has-warning has-feedback{% endif %}">
+      <label for="{{ form.name.id_for_label }}" class="control-label">Name</label>
+      {{ form.name }}
     </div>
-    <div class="form-group">
-      <label for="email" class="control-label">E-mail</label>
-      <input type="text" name="email" value="" id="email">
+    <div class="form-group {% if form.email.form_errors %}has-warning has-feedback{% endif %}">
+      <label for="{{form.email.id_for_label}}" class="control-label">E-mail</label>
+      {{ form.email }}
     </div>
-    <!-- <input type="hidden" class="hidden" value="" name="album_id"> -->
+    <!-- <input type="hidden" class="hidden" value="{{ album_id }}" name="album_id"> -->
 
     <button type="submit" class="btn btn-success">Reserve</button>
   </form>
+
+  {% if form_errors %}
+    <div class="text-danger">
+      {% for key, error in form_errors %}
+        <!-- treat html and display error -->
+        {% autoescape off %}
+          {{ error }}
+        {% endautoescape %}
+      {% endfor %}
+    </div>
+  {% endif %}
 
 </div>
 

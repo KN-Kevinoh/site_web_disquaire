@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Artist,  Album, Contact, Booking
 #from django.template import loader # module loader to load templates
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from .forms import ContactForm, FormatErrorList
 
 
 # Create your views here.
@@ -38,13 +39,50 @@ def details(request, id):
     #album = Album.objects.get(pk=album_id)
     album = get_object_or_404(Album, pk=album_id)
     artists_name = " ".join([artist.name for artist in album.artists.all()])
-   
+    # set gabarit context
     context = {
         'album_title': album.title,
         'album_name': artists_name,
         'album_id': album.id,
         'thumbnail': album.picture
     }
+    
+    # check request type
+    if request.method == "POST":
+        # get form infos
+        form = ContactForm(request.POST, error_class= FormatErrorList)
+        if form.is_valid():
+            """ is_valid method also convert the data to python object, 
+             to use them, get them from django validation dictionnary """
+            email = form.cleaned_data["email"]
+            name = form.cleaned_data["name"]
+
+            #email = request.POST.get("email")
+            #name = request.POST.get("name")
+
+            # get contact of email
+            contact = Contact.objects.filter(email=email)
+
+            if not contact.exists():
+                # create contact
+                contact = Contact.objects.create(email=email, name=name)
+    
+            # get request album
+            album = get_object_or_404(Album, pk=album_id)
+            # create reservation
+            booking = Booking.objects.create(contact=contact, album=album)
+            # set available to false after booking
+            album.available = False
+            album.save()
+            # set context 
+            context = {'album_title': album.title}
+
+            return render(request, 'store/thanks.html', context)
+        else:
+            context['form_errors'] = form.errors.items()
+    else:
+        form = ContactForm()
+    context['form'] = form
     return render(request, 'store/details.html', context) 
 
 def search(request):
