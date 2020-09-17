@@ -10,19 +10,19 @@ class Artist(models.Model):
 
     # change model representation (useful in admin section)
     class Meta:
-        verbose_name ='artists'
+        verbose_name ='artist'
 
 
 class Contact(models.Model):
-    email = models.EmailField('Email address',max_length=100)
-    name = models.CharField('Contact name',max_length=200)
+    email = models.EmailField('Email',max_length=100)
+    name = models.CharField('Name',max_length=200)
 
     def __str__(self):
         return self.name
 
     # change model representation (useful in admin section)
     class Meta:
-        verbose_name ='contacts'
+        verbose_name ='client'
 
 class Album(models.Model):
     reference = models.IntegerField('Album reference',null=True)
@@ -37,7 +37,7 @@ class Album(models.Model):
     
     # change model representation (useful in admin section)
     class Meta:
-        verbose_name ='albums'
+        verbose_name ='album'
 
 
 class Booking(models.Model):
@@ -51,5 +51,5 @@ class Booking(models.Model):
     
     # change model representation (useful in admin section)
     class Meta:
-        verbose_name ='reservations'
+        verbose_name ='reservation'
 
