@@ -4,6 +4,7 @@ from .models import Artist,  Album, Contact, Booking
 #from django.template import loader # module loader to load templates
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .forms import ContactForm, FormatErrorList
+from django.db import transaction, IntegrityError
 
 
 # Create your views here.
@@ -34,6 +35,8 @@ def listing(request):
     context = {'albums': albums, 'paginate': True}
     return render(request, 'store/listing.html', context)
 
+
+
 def details(request, id):
     album_id = int(id)
     #album = Album.objects.get(pk=album_id)
@@ -60,24 +63,34 @@ def details(request, id):
             #email = request.POST.get("email")
             #name = request.POST.get("name")
 
-            # get contact of email
-            contact = Contact.objects.filter(email=email)
+            # run query try/except to avoid displaying error 500 when error occurred, just display simple error message
+            try:
+                # specify to treat all queries as transactions
+                with transaction.atomic():
+                    # get contact of email
+                    contact = Contact.objects.filter(email=email)
 
-            if not contact.exists():
-                # create contact
-                contact = Contact.objects.create(email=email, name=name)
-    
-            # get request album
-            album = get_object_or_404(Album, pk=album_id)
-            # create reservation
-            booking = Booking.objects.create(contact=contact, album=album)
-            # set available to false after booking
-            album.available = False
-            album.save()
-            # set context 
-            context = {'album_title': album.title}
+                    if not contact.exists():
+                        # create contact
+                        contact = Contact.objects.create(email=email, name=name)
+                    else:
+                        # get contact from queryset, to make able the user can reserve more than one album
+                        contact = Contact.first()
+            
+                    # get request album
+                    album = get_object_or_404(Album, pk=album_id)
+                    # create reservation
+                    booking = Booking.objects.create(contact=contact, album=album)
+                    # set available to false after booking
+                    album.available = False
+                    album.save()
+                    # set context 
+                    context = {'album_title': album.title}
 
-            return render(request, 'store/thanks.html', context)
+                    return render(request, 'store/thanks.html', context)
+            except IntegrityError:
+                form.errors['internal'] = "Sorry! an error occurred, just trying again."
+            
         else:
             context['form_errors'] = form.errors.items()
     else:

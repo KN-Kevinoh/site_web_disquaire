@@ -21,7 +21,7 @@ from store import views
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^store/', include(('store.urls','store'), namespace='store')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^storeadmin/', admin.site.urls),
 ]
 
 # include urls of django toolbar, only available in debug mode
