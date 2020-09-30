@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.safestring import mark_safe
+
 
 # Create your models here.
 
@@ -29,7 +31,7 @@ class Album(models.Model):
     created_at = models.DateTimeField('Creation date',auto_now_add=True)
     available = models.BooleanField('Is album avaible',default=True)
     title = models.CharField('Album title',max_length=200)
-    picture = models.URLField('Image album (URL)',)
+    picture = models.FileField('Image album (URL)',upload_to='media/',blank=True,null=True)
     artists = models.ManyToManyField(Artist, related_name='albums', blank=True)
 
     def __str__(self):

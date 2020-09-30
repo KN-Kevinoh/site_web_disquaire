@@ -17,18 +17,20 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import  include, url
 from store import views
+from django.views.static import serve
 
 urlpatterns = [
-    url(r'^$', views.index),
+    url(r'^$', views.index, name='index'),
     url(r'^store/', include(('store.urls','store'), namespace='store')),
     url(r'^storeadmin/', admin.site.urls),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
 ]
 
 # include urls of django toolbar, only available in debug mode
+
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
-

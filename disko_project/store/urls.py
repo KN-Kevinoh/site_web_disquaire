@@ -1,6 +1,7 @@
 #import urls from project
 from django.conf.urls import url
 
+
 #import views 
 from . import views
 

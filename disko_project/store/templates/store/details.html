@@ -17,7 +17,7 @@
   <h2 class="text-center artist_name">Reservation: {{ album_title }}</h2>
   <p style="margin-bottom: 20px;">Validate  {{ album_title }} and come take it as soonce as possible! </p>
   <form class="form-inline" action="{% url 'store:details' id=album_id %}" method="post">
-    {% csrf_token %} <!-- prevent to cross side requests  foldering -->
+    {% csrf_token %} <!-- prevent to cross side requests   forgeries -->
     <div class="form-group {% if form.name.form_errors %}has-warning has-feedback{% endif %}">
       <label for="{{ form.name.id_for_label }}" class="control-label">Name</label>
       {{ form.name }}

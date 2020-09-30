@@ -23,7 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3wrs18lg+3uf2bpb6nf7a(=@=0-!@f8)apugv4vi6j&&hz3fek'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('ENV') == 'PRODUCTION':
+    DEBUG = False
+else:
+    DEBUG = True 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
 
@@ -50,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.locale.LocaleMiddleware'# to translate backoffice
+    'django.middleware.locale.LocaleMiddleware',# to translate backoffice
 ]
 
 ROOT_URLCONF = 'disko_project.urls'
@@ -128,10 +131,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+#STATICFILES_FINDERS = [
+#    'django.contrib.staticfiles.finders.FileSystemFinder',
+ #   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#]
 
 STATIC_URL = '/static/'
-
+#STATICFILES_DIRS = ( os.path.join('static'), )
 # indicate internal ip
 INTERNAL_IPS = ['127.0.0.1']
+
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
+
+MEDIA_URL = '/media/'
+
+
 
 

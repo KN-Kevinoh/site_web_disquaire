@@ -43,11 +43,15 @@ def details(request, id):
     album = get_object_or_404(Album, pk=album_id)
     artists_name = " ".join([artist.name for artist in album.artists.all()])
     # set gabarit context
+    if album.picture and hasattr(album.picture, 'url'):
+        image = album.picture.url
+    else: 
+        image = '#'
     context = {
         'album_title': album.title,
         'album_name': artists_name,
         'album_id': album.id,
-        'thumbnail': album.picture
+        'thumbnail':  image
     }
     
     # check request type
